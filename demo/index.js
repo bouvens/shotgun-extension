@@ -2,12 +2,12 @@ const allTargets = new Set()
 const allParticles = new Set()
 const FIRE_RADIUS = 100
 const MEGA_MULTIPLIER = 0.1
-const getInitialSpeed = (animationSpeed) => 3 * animationSpeed
-const getSpeedDispersion = (animationSpeed) => 0.3 * animationSpeed
-const getYAcceleration = (animationSpeed) => 0.05 * (animationSpeed ** 2)
+const INITIAL_SPEED = 3
+const SPEED_DISPERSION = INITIAL_SPEED * 0.1
+const Y_ACCELERATION = 0.05
 const ROTATION_VARIANTS = 30
-const getFastRotation = (animationSpeed) => 2 / animationSpeed
-const getSlowRotation = (animationSpeed) => 5 / animationSpeed
+const FAST_ROTATION = 2
+const SLOW_ROTATION = 6
 
 let scrollLeft
 let scrollTop
@@ -35,17 +35,16 @@ function handleClick(event) {
       return
     }
     allTargets.delete(target)
-    // TODO rewrite shorter
-    const xVelocity = (target.x - pageX) / curDistance * getInitialSpeed(animationSpeed) +
-      getDispersion(getSpeedDispersion(animationSpeed))
-    const yVelocity = (target.y - pageY) / curDistance * getInitialSpeed(animationSpeed) +
-      getDispersion(getSpeedDispersion(animationSpeed))
+    const xVelocity = ((target.x - pageX) / curDistance * INITIAL_SPEED +
+      getDispersion(SPEED_DISPERSION)) * animationSpeed
+    const yVelocity = ((target.y - pageY) / curDistance * INITIAL_SPEED +
+      getDispersion(SPEED_DISPERSION)) * animationSpeed
 
     const rotatingElement = document.createElement('div')
     Object.assign(rotatingElement.style, {
-      'animation-duration': `${Math.random() *
-      (getSlowRotation(animationSpeed) - getFastRotation(animationSpeed)) +
-      getFastRotation(animationSpeed)}s`,
+      'animation-duration': `${(Math.random() *
+      (SLOW_ROTATION - FAST_ROTATION) +
+      FAST_ROTATION) / animationSpeed}s`,
       'animation-iteration-count': 'infinite',
       'animation-name': `rotate${Math.floor(Math.random() * ROTATION_VARIANTS)}`,
     })
@@ -119,6 +118,7 @@ function prepareElement(elem) {
 }
 
 function moveParticles() {
+  let acceleration = Y_ACCELERATION * (shifted ? MEGA_MULTIPLIER ** 2 : 1)
   allParticles.forEach(particle => {
     const x = particle.x + particle.xVelocity
     const y = particle.y + particle.yVelocity
@@ -132,7 +132,7 @@ function moveParticles() {
     }
     particle.x = x
     particle.y = y
-    particle.yVelocity += getYAcceleration(shifted ? MEGA_MULTIPLIER : 1)
+    particle.yVelocity += acceleration
 
     particle.elem.style.transform = `translate(${x}px, ${y}px)`
   })
