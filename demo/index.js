@@ -28,10 +28,11 @@ function handleClick(event) {
   event.preventDefault()
   const { pageX, pageY, shiftKey } = event
   const animationSpeed = shiftKey ? MEGA_MULTIPLIER : 1
+  const radius = FIRE_RADIUS / (event.ctrlKey ? MEGA_MULTIPLIER : 1)
 
   allTargets.forEach((target) => {
     const curDistance = distance(pageX, pageY, target.x, target.y)
-    if (curDistance > FIRE_RADIUS) {
+    if (curDistance > radius) {
       return
     }
     allTargets.delete(target)
