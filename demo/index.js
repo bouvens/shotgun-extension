@@ -41,13 +41,6 @@ function handleClick(event) {
     const yVelocity = (target.y - pageY) / curDistance * getInitialSpeed(animationSpeed) +
       getDispersion(getSpeedDispersion(animationSpeed))
 
-    const flyingElement = document.createElement('div')
-    Object.assign(flyingElement.style, {
-      position: 'absolute',
-      top: `${target.elem.offsetTop}px`,
-      left: `${target.elem.offsetLeft}px`,
-    })
-
     const rotatingElement = document.createElement('div')
     Object.assign(rotatingElement.style, {
       'animation-duration': `${Math.random() *
@@ -57,6 +50,17 @@ function handleClick(event) {
       'animation-name': `rotate${Math.floor(Math.random() * ROTATION_VARIANTS)}`,
     })
     rotatingElement.textContent = target.elem.textContent
+
+    const flyingElement = document.createElement('div')
+    Object.assign(flyingElement.style, {
+      position: 'absolute',
+      top: `${target.elem.offsetTop}px`,
+      left: `${target.elem.offsetLeft}px`,
+      height: `${target.height}px`,
+      width: `${target.width}px`,
+      display: 'flex',
+      'align-items': 'center',
+    })
     flyingElement.append(rotatingElement)
 
     target.elem.parentNode.prepend(flyingElement)
