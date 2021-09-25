@@ -25,7 +25,7 @@ function handleClick(event) {
   event.preventDefault()
   const { pageX, pageY } = event
 
-  allTargets.forEach(target => {
+  allTargets.forEach((target) => {
     const curDistance = distance(pageX, pageY, target.x, target.y)
     if (curDistance > FIRE_RADIUS) {
       return
@@ -35,27 +35,39 @@ function handleClick(event) {
       getDispersion(SPEED_DISPERSION)
     const yVelocity = (target.y - pageY) / curDistance * Y_INITIAL_SPEED +
       getDispersion(SPEED_DISPERSION)
+    const flyingElement = document.createElement('div')
+    flyingElement.textContent = target.elem.textContent
+    Object.assign(flyingElement.style, {
+      position: 'absolute',
+      top: `${target.elem.offsetTop}px`,
+      left: `${target.elem.offsetLeft}px`,
+    })
+    target.elem.parentNode.prepend(flyingElement)
+    target.elem.style.visibility = 'hidden'
     allParticles.add({
-      elem: target.elem,
+      elem: flyingElement,
       x: 0,
       y: 0,
-      initBottom: target.bottom,
-      initRight: target.right,
+      initTop: target.top,
+      initLeft: target.left,
       xVelocity,
       yVelocity,
-    })
-    Object.assign(target.elem.style, {
-      position: 'relative',
-      transform: 'translate(0, 0)',
     })
   })
 }
 
 function position(elem) {
   const rect = elem.getBoundingClientRect()
-  const bottom = rect.bottom + scrollTop
-  const right = rect.right + scrollLeft
-  return { bottom, right, y: bottom - rect.height / 2, x: right - rect.width / 2 }
+  const top = rect.top + scrollTop
+  const left = rect.left + scrollLeft
+  return {
+    top,
+    left,
+    y: top + rect.height / 2,
+    x: left + rect.width / 2,
+    height: rect.height,
+    width: rect.width,
+  }
 }
 
 function prepareElement(elem) {
@@ -93,15 +105,11 @@ function animate() {
   allParticles.forEach(particle => {
     const x = particle.x + particle.xVelocity
     const y = particle.y + particle.yVelocity
-    const right = particle.initRight + x
-    const bottom = particle.initBottom + y
-    if (right >= windowWidth + scrollLeft
-      || bottom >= windowHeight + scrollTop) {
-      Object.assign(particle.elem.style, {
-        visibility: 'hidden',
-        top: '0px',
-        left: '0px',
-      })
+    const left = particle.initLeft + x
+    const top = particle.initTop + y
+    if (left >= windowWidth + scrollLeft
+      || top >= windowHeight + scrollTop) {
+      particle.elem.style.display = 'none'
       allParticles.delete(particle)
       return
     }
@@ -109,10 +117,7 @@ function animate() {
     particle.y = y
     particle.yVelocity += Y_ACCELERATION
 
-    Object.assign(particle.elem.style, {
-      left: `${x}px`,
-      top: `${y}px`,
-    })
+    particle.elem.style.transform = `translate(${x}px, ${y}px)`
   })
   requestAnimationFrame(animate)
 }
