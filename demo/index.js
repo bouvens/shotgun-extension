@@ -146,6 +146,10 @@ function updateScroll() {
 function updateSize() {
   windowWidth = window.innerWidth || document.documentElement.clientWidth
   windowHeight = window.innerHeight || document.documentElement.clientHeight
+
+  allTargets.forEach((target) => {
+    Object.assign(target, { ...position(target.elem) })
+  })
 }
 
 function initialize() {
