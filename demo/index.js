@@ -5,9 +5,8 @@ const MEGA_MULTIPLIER = 0.1
 const INITIAL_SPEED = 3
 const SPEED_DISPERSION = INITIAL_SPEED * 0.1
 const Y_ACCELERATION = 0.05
-const ROTATION_VARIANTS = 30
-const FAST_ROTATION = 2
-const SLOW_ROTATION = 6
+const FAST_ROTATION = 0.4
+const SLOW_ROTATION = FAST_ROTATION * 3
 
 let scrollLeft
 let scrollTop
@@ -21,6 +20,10 @@ function distance(x1, y1, x2, y2) {
 
 function getDispersion(c) {
   return (Math.random() * 2 - 1) * c
+}
+
+function getVectorCoordinate() {
+  return Math.random() * 2 - 1
 }
 
 function handleClick(event) {
@@ -41,17 +44,8 @@ function handleClick(event) {
     const yVelocity = ((target.y - pageY) / curDistance * INITIAL_SPEED +
       getDispersion(SPEED_DISPERSION)) * animationSpeed
 
-    const rotatingElement = document.createElement('div')
-    Object.assign(rotatingElement.style, {
-      'animation-duration': `${(Math.random() *
-      (SLOW_ROTATION - FAST_ROTATION) +
-      FAST_ROTATION) / animationSpeed}s`,
-      'animation-iteration-count': 'infinite',
-      'animation-name': `rotate${Math.floor(Math.random() * ROTATION_VARIANTS)}`,
-    })
-    rotatingElement.textContent = target.elem.textContent
-
     const flyingElement = document.createElement('div')
+    flyingElement.textContent = target.elem.textContent
     Object.assign(flyingElement.style, {
       position: 'absolute',
       top: `${target.elem.offsetTop}px`,
@@ -61,7 +55,6 @@ function handleClick(event) {
       display: 'flex',
       'align-items': 'center',
     })
-    flyingElement.append(rotatingElement)
 
     target.elem.parentNode.prepend(flyingElement)
     target.elem.style.visibility = 'hidden'
@@ -73,6 +66,12 @@ function handleClick(event) {
       initLeft: target.left,
       xVelocity,
       yVelocity,
+      rotation: 0,
+      rotationX: getVectorCoordinate(),
+      rotationY: getVectorCoordinate(),
+      rotationZ: getVectorCoordinate(),
+      rotationSpeed: (Math.random() * (SLOW_ROTATION - FAST_ROTATION) + FAST_ROTATION) *
+        animationSpeed,
     })
   })
 }
@@ -131,11 +130,16 @@ function moveParticles() {
       allParticles.delete(particle)
       return
     }
-    particle.x = x
-    particle.y = y
-    particle.yVelocity += acceleration
+    const rotation = particle.rotation + particle.rotationSpeed
+    Object.assign(particle, {
+      x,
+      y,
+      yVelocity: particle.yVelocity + acceleration,
+      rotation,
+    })
 
-    particle.elem.style.transform = `translate(${x}px, ${y}px)`
+    particle.elem.style.transform =
+      `translate(${x}px, ${y}px) rotate3d(${particle.rotationX}, ${particle.rotationY}, ${particle.rotationZ}, ${rotation}deg)`
   })
   requestAnimationFrame(moveParticles)
 }
@@ -184,6 +188,7 @@ function updateShifted() {
         Object.assign(particle, {
           xVelocity: particle.xVelocity * MEGA_MULTIPLIER,
           yVelocity: particle.yVelocity * MEGA_MULTIPLIER,
+          rotationSpeed: particle.rotationSpeed / MEGA_MULTIPLIER,
         })
       })
       shifted = true
@@ -192,6 +197,7 @@ function updateShifted() {
         Object.assign(particle, {
           xVelocity: particle.xVelocity / MEGA_MULTIPLIER,
           yVelocity: particle.yVelocity / MEGA_MULTIPLIER,
+          rotationSpeed: particle.rotationSpeed * MEGA_MULTIPLIER,
         })
       })
       shifted = false
@@ -202,24 +208,6 @@ function updateShifted() {
   window.document.addEventListener('keyup', update)
 }
 
-function getVectorCoordinate() {
-  return Math.random() * 2 - 1
-}
-
-function addAnimations() {
-  const style = document.createElement('style')
-  document.head.append(style)
-  for (let i = 0; i < ROTATION_VARIANTS; i++) {
-    style.sheet.insertRule(`
-        @keyframes rotate${i} {
-          to {
-            transform: rotate3d(${getVectorCoordinate()}, ${getVectorCoordinate()}, ${getVectorCoordinate()}, 360deg);
-          }
-        }
-      `)
-  }
-}
-
 function initialize() {
   console.time('initialization')
   addShield()
@@ -228,7 +216,6 @@ function initialize() {
   updateShifted()
   window.addEventListener('scroll', updateScroll)
   window.addEventListener('resize', updateSize)
-  addAnimations()
   visibleElements.forEach(prepareElement)
   requestAnimationFrame(moveParticles)
   console.timeEnd('initialization')
