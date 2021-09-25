@@ -1,8 +1,7 @@
 const allTargets = new Set()
 const allParticles = new Set()
 const FIRE_RADIUS = 100
-const X_INITIAL_SPEED = 3
-const Y_INITIAL_SPEED = 3
+const INITIAL_SPEED = 3
 const SPEED_DISPERSION = 0.3
 const Y_ACCELERATION = 0.05
 
@@ -20,7 +19,6 @@ function getDispersion(c) {
 }
 
 function handleClick(event) {
-  // TODO add coverage for a whole page to prevent other events, elem.style.cursor = 'crosshair'
   event.stopImmediatePropagation()
   event.preventDefault()
   const { pageX, pageY } = event
@@ -31,9 +29,9 @@ function handleClick(event) {
       return
     }
     allTargets.delete(target)
-    const xVelocity = (target.x - pageX) / curDistance * X_INITIAL_SPEED +
+    const xVelocity = (target.x - pageX) / curDistance * INITIAL_SPEED +
       getDispersion(SPEED_DISPERSION)
-    const yVelocity = (target.y - pageY) / curDistance * Y_INITIAL_SPEED +
+    const yVelocity = (target.y - pageY) / curDistance * INITIAL_SPEED +
       getDispersion(SPEED_DISPERSION)
     const flyingElement = document.createElement('div')
     flyingElement.textContent = target.elem.textContent
@@ -75,10 +73,6 @@ function prepareElement(elem) {
     return
   }
 
-  Object.assign(elem.style, {
-    cursor: 'crosshair',
-    'user-select': 'none',
-  })
   elem.childNodes.forEach(child => {
     if (!child.nodeValue) {
       return
@@ -123,14 +117,26 @@ function animate() {
 }
 
 function isVisible(elem) {
-  // return elem.offsetParent !== null
-  // slower and appropriate for fixed elements
   const style = window.getComputedStyle(elem)
   return style.display !== 'none'
 }
 
 const allElements = document.querySelectorAll('body *')
 const visibleElements = Array.prototype.filter.call(allElements, isVisible)
+
+function addShield() {
+  const elem = document.createElement('div')
+  Object.assign(elem.style, {
+    cursor: 'crosshair',
+    'user-select': 'none',
+    position: 'fixed',
+    top: 0,
+    width: '100%',
+    height: '100%',
+  })
+  elem.addEventListener('click', handleClick)
+  document.body.append(elem)
+}
 
 function updateScroll() {
   scrollLeft = window.pageXOffset || document.documentElement.scrollLeft
@@ -144,9 +150,9 @@ function updateSize() {
 
 function initialize() {
   console.time('initialization')
+  addShield()
   updateScroll()
   updateSize()
-  window.addEventListener('click', handleClick)
   visibleElements.forEach(prepareElement)
   requestAnimationFrame(animate)
   console.timeEnd('initialization')
