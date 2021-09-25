@@ -1,14 +1,19 @@
 const allTargets = new Set()
 const allParticles = new Set()
 const FIRE_RADIUS = 100
-const INITIAL_SPEED = 3
-const SPEED_DISPERSION = 0.3
-const Y_ACCELERATION = 0.05
+const MEGA_MULTIPLIER = 0.1
+const getInitialSpeed = (animationSpeed) => 3 * animationSpeed
+const getSpeedDispersion = (animationSpeed) => 0.3 * animationSpeed
+const getYAcceleration = (animationSpeed) => 0.05 * (animationSpeed ** 2)
+const ROTATION_VARIANTS = 30
+const getFastRotation = (animationSpeed) => 2 / animationSpeed
+const getSlowRotation = (animationSpeed) => 5 / animationSpeed
 
 let scrollLeft
 let scrollTop
 let windowWidth
 let windowHeight
+let shifted = false
 
 function distance(x1, y1, x2, y2) {
   return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
@@ -21,7 +26,8 @@ function getDispersion(c) {
 function handleClick(event) {
   event.stopImmediatePropagation()
   event.preventDefault()
-  const { pageX, pageY } = event
+  const { pageX, pageY, shiftKey } = event
+  const animationSpeed = shiftKey ? MEGA_MULTIPLIER : 1
 
   allTargets.forEach((target) => {
     const curDistance = distance(pageX, pageY, target.x, target.y)
@@ -29,17 +35,30 @@ function handleClick(event) {
       return
     }
     allTargets.delete(target)
-    const xVelocity = (target.x - pageX) / curDistance * INITIAL_SPEED +
-      getDispersion(SPEED_DISPERSION)
-    const yVelocity = (target.y - pageY) / curDistance * INITIAL_SPEED +
-      getDispersion(SPEED_DISPERSION)
+    // TODO rewrite shorter
+    const xVelocity = (target.x - pageX) / curDistance * getInitialSpeed(animationSpeed) +
+      getDispersion(getSpeedDispersion(animationSpeed))
+    const yVelocity = (target.y - pageY) / curDistance * getInitialSpeed(animationSpeed) +
+      getDispersion(getSpeedDispersion(animationSpeed))
+
     const flyingElement = document.createElement('div')
-    flyingElement.textContent = target.elem.textContent
     Object.assign(flyingElement.style, {
       position: 'absolute',
       top: `${target.elem.offsetTop}px`,
       left: `${target.elem.offsetLeft}px`,
     })
+
+    const rotatingElement = document.createElement('div')
+    Object.assign(rotatingElement.style, {
+      'animation-duration': `${Math.random() *
+      (getSlowRotation(animationSpeed) - getFastRotation(animationSpeed)) +
+      getFastRotation(animationSpeed)}s`,
+      'animation-iteration-count': 'infinite',
+      'animation-name': `rotate${Math.floor(Math.random() * ROTATION_VARIANTS)}`,
+    })
+    rotatingElement.textContent = target.elem.textContent
+    flyingElement.append(rotatingElement)
+
     target.elem.parentNode.prepend(flyingElement)
     target.elem.style.visibility = 'hidden'
     allParticles.add({
@@ -95,7 +114,7 @@ function prepareElement(elem) {
   })
 }
 
-function animate() {
+function moveParticles() {
   allParticles.forEach(particle => {
     const x = particle.x + particle.xVelocity
     const y = particle.y + particle.yVelocity
@@ -109,11 +128,11 @@ function animate() {
     }
     particle.x = x
     particle.y = y
-    particle.yVelocity += Y_ACCELERATION
+    particle.yVelocity += getYAcceleration(shifted ? MEGA_MULTIPLIER : 1)
 
     particle.elem.style.transform = `translate(${x}px, ${y}px)`
   })
-  requestAnimationFrame(animate)
+  requestAnimationFrame(moveParticles)
 }
 
 function isVisible(elem) {
@@ -152,13 +171,61 @@ function updateSize() {
   })
 }
 
+function updateShifted() {
+  function update(e) {
+    const newShifted = e.shiftKey
+    if (newShifted && !shifted) {
+      allParticles.forEach((particle) => {
+        Object.assign(particle, {
+          xVelocity: particle.xVelocity * MEGA_MULTIPLIER,
+          yVelocity: particle.yVelocity * MEGA_MULTIPLIER,
+        })
+      })
+      shifted = true
+    } else if (!newShifted && shifted) {
+      allParticles.forEach((particle) => {
+        Object.assign(particle, {
+          xVelocity: particle.xVelocity / MEGA_MULTIPLIER,
+          yVelocity: particle.yVelocity / MEGA_MULTIPLIER,
+        })
+      })
+      shifted = false
+    }
+  }
+
+  window.document.addEventListener('keydown', update)
+  window.document.addEventListener('keyup', update)
+}
+
+function getVectorCoordinate() {
+  return Math.random() * 2 - 1
+}
+
+function addAnimations() {
+  const style = document.createElement('style')
+  document.head.append(style)
+  for (let i = 0; i < ROTATION_VARIANTS; i++) {
+    style.sheet.insertRule(`
+        @keyframes rotate${i} {
+          to {
+            transform: rotate3d(${getVectorCoordinate()}, ${getVectorCoordinate()}, ${getVectorCoordinate()}, 360deg);
+          }
+        }
+      `)
+  }
+}
+
 function initialize() {
   console.time('initialization')
   addShield()
   updateScroll()
   updateSize()
+  updateShifted()
+  window.addEventListener('scroll', updateScroll)
+  window.addEventListener('resize', updateSize)
+  addAnimations()
   visibleElements.forEach(prepareElement)
-  requestAnimationFrame(animate)
+  requestAnimationFrame(moveParticles)
   console.timeEnd('initialization')
 }
 
@@ -168,7 +235,3 @@ document.addEventListener('readystatechange', (event) => {
   }
   initialize()
 })
-
-window.addEventListener('scroll', updateScroll)
-
-window.addEventListener('resize', updateSize)
