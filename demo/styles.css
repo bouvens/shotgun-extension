@@ -1,0 +1,94 @@
+html {
+    font-family: 'Fira Code', monospace;
+    font-size: 20px;
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+body {
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Vollkorn", Palatino, Times, serif;
+    font-weight: normal;
+    margin-bottom: 0;
+}
+
+h1 {
+    font-size: 4rem;
+    margin: 0;
+    line-height: 1;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.8rem;
+}
+
+header {
+    text-align: center;
+}
+
+small {
+    font-size: .5em;
+}
+
+p {
+    line-height: 1.5;
+}
+
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+header {
+    margin: 4rem 0 2.5rem;
+}
+
+article {
+    margin-bottom: 3rem;
+}
+
+.sheet {
+    margin: 0 auto;
+    padding: 0 5%;
+    max-width: 42rem;
+}
+
+.screen-shot {
+    display: inline-block;
+    border: 5px dotted #007200;
+    padding: 8px;
+}
+
+.screen-shot img {
+    max-width: 100%;
+}
+
+.screen-shot:hover {
+    border-color: #00c200;
+}
+
+.screen-shot img {
+    vertical-align: middle;
+}
+
+/* new */
+* {
+    cursor: crosshair !important;
+}
