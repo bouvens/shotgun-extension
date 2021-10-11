@@ -37,6 +37,7 @@ export function handleClick(event) {
           position: 'absolute',
           top: `${target.elem.offsetTop}px`,
           left: `${target.elem.offsetLeft}px`,
+          'box-shadow': '0 0 3px 0 rgba(0, 0, 0, 0.16), 0 0 3px 0 rgba(0, 0, 0, 0.23)',
         })
         target.elem.parentNode.prepend(flyingImage)
         target.elem.style.visibility = 'hidden'
