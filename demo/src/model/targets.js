@@ -26,11 +26,11 @@ function makePosition(topOffset, leftOffset) {
   }
 }
 
-export function makeAddTarget(topOffset, leftOffset) {
+export function makeAddTarget(topOffset, leftOffset, type) {
   const position = makePosition(topOffset, leftOffset)
 
   return (elem) => {
-    allTargets.add({ elem, ...position(elem) })
+    allTargets.add({ ...position(elem), elem, type })
   }
 }
 
