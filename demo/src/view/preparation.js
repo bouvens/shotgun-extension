@@ -1,4 +1,3 @@
-import { handleClick } from '../controller/click.js'
 import { scrollLeft, scrollTop } from '../controller/viewport.js'
 import { makeAddTarget } from '../model/targets.js'
 import { SHARD_SIZE_PX } from '../config.js'
@@ -7,7 +6,7 @@ import * as ELEMENT_TYPES from '../element-types.js'
 const ABSOLUTE_POSITIONS = ['absolute', 'fixed']
 const IMG_TAGS = ['IMG', 'CANVAS']
 
-export function addShield() {
+export function addShield(clickHandler) {
   const elem = document.createElement('div')
   Object.assign(elem.style, {
     cursor: 'crosshair',
@@ -17,7 +16,7 @@ export function addShield() {
     width: '100%',
     height: '100%',
   })
-  elem.addEventListener('click', handleClick)
+  elem.addEventListener('click', clickHandler)
   document.body.append(elem)
 }
 
