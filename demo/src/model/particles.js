@@ -1,34 +1,15 @@
-import { MEGA_MULTIPLIER, Y_ACCELERATION } from '../config.js'
+import { SLOW_MOTION_MULTIPLIER, GRAVITY_ACCELERATION } from '../config.js'
 import { shifted } from '../controller/shift.js'
 import { scrollLeft, scrollTop, windowHeight, windowWidth } from '../controller/viewport.js'
 
 export const allParticles = new Set()
 
-export function slowMotionOn() {
-  allParticles.forEach((particle) => {
-    Object.assign(particle, {
-      xVelocity: particle.xVelocity * MEGA_MULTIPLIER,
-      yVelocity: particle.yVelocity * MEGA_MULTIPLIER,
-      rotationSpeed: particle.rotationSpeed * MEGA_MULTIPLIER,
-    })
-  })
-}
-
-export function slowMotionOff() {
-  allParticles.forEach((particle) => {
-    Object.assign(particle, {
-      xVelocity: particle.xVelocity / MEGA_MULTIPLIER,
-      yVelocity: particle.yVelocity / MEGA_MULTIPLIER,
-      rotationSpeed: particle.rotationSpeed / MEGA_MULTIPLIER,
-    })
-  })
-}
-
 export function moveParticles() {
-  let acceleration = Y_ACCELERATION * (shifted ? MEGA_MULTIPLIER ** 2 : 1)
+  const slowMotionMultiplier = shifted ? SLOW_MOTION_MULTIPLIER : 1
+  let acceleration = GRAVITY_ACCELERATION * (slowMotionMultiplier ** 2)
   allParticles.forEach(particle => {
-    const x = particle.x + particle.xVelocity
-    const y = particle.y + particle.yVelocity
+    const x = particle.x + particle.xVelocity * slowMotionMultiplier
+    const y = particle.y + particle.yVelocity * slowMotionMultiplier
     const left = particle.initLeft + x
     const top = particle.initTop + y
     if (left >= windowWidth + scrollLeft
@@ -37,7 +18,7 @@ export function moveParticles() {
       allParticles.delete(particle)
       return
     }
-    const rotation = particle.rotation + particle.rotationSpeed
+    const rotation = particle.rotation + particle.rotationSpeed * slowMotionMultiplier
     Object.assign(particle, {
       x,
       y,

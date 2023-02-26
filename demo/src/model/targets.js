@@ -1,9 +1,10 @@
 import {
-  FAST_ROTATION,
-  FIRE_RADIUS,
+  BIG_SHOT_MULTIPLIER,
+  FAST_ROTATION_PERIOD_S,
+  FIRE_RADIUS_PX,
   INITIAL_SPEED,
-  MEGA_MULTIPLIER,
-  SLOW_ROTATION,
+  SLOW_MOTION_MULTIPLIER,
+  SLOW_ROTATION_PERIOD_S,
   SPEED_DISPERSION,
 } from '../config.js'
 import { allParticles } from './particles.js'
@@ -54,8 +55,8 @@ function getVectorCoordinate() {
 }
 
 export function shoot(x, y, slowMotion, big, createFlyingElem) {
-  const animationSpeed = slowMotion ? MEGA_MULTIPLIER : 1
-  const radius = FIRE_RADIUS / (big ? MEGA_MULTIPLIER : 1)
+  const animationSpeed = slowMotion ? SLOW_MOTION_MULTIPLIER : 1
+  const radius = FIRE_RADIUS_PX * (big ? BIG_SHOT_MULTIPLIER : 1)
 
   allTargets.forEach((target) => {
     const curDistance = distance(x, y, target.x, target.y)
@@ -80,7 +81,7 @@ export function shoot(x, y, slowMotion, big, createFlyingElem) {
       rotationX: getVectorCoordinate(),
       rotationY: getVectorCoordinate(),
       rotationZ: getVectorCoordinate(),
-      rotationSpeed: (Math.random() * (SLOW_ROTATION - FAST_ROTATION) + FAST_ROTATION) *
+      rotationSpeed: (Math.random() * (SLOW_ROTATION_PERIOD_S - FAST_ROTATION_PERIOD_S) + FAST_ROTATION_PERIOD_S) *
         animationSpeed,
     })
   })

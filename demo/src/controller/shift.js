@@ -1,6 +1,6 @@
 export let shifted = false
 
-export function updateShifted(onShift, onUnshift) {
+export function updateShifted(onShift = () => {}, onUnshift = () => {}) {
   function update(e) {
     const newShifted = e.shiftKey
     if (newShifted && !shifted) {

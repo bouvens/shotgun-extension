@@ -1,7 +1,7 @@
 import { handleClick } from '../controller/click.js'
 import { scrollLeft, scrollTop } from '../controller/viewport.js'
 import { makeAddTarget } from '../model/targets.js'
-import { SHARD_SIZE } from '../config.js'
+import { SHARD_SIZE_PX } from '../config.js'
 import * as ELEMENT_TYPES from '../element-types.js'
 
 const ABSOLUTE_POSITIONS = ['absolute', 'fixed']
@@ -25,20 +25,20 @@ function divideImage(img) {
   const addTarget = makeAddTarget(scrollTop, scrollLeft, ELEMENT_TYPES.SHARD)
   const shards = []
   const { clientWidth, clientHeight } = img
-  const columns = Math.ceil(clientWidth / SHARD_SIZE)
-  const rows = Math.ceil(clientHeight / SHARD_SIZE)
+  const columns = Math.ceil(clientWidth / SHARD_SIZE_PX)
+  const rows = Math.ceil(clientHeight / SHARD_SIZE_PX)
 
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < columns; x++) {
       const canvas = document.createElement('canvas')
-      const sx = x * SHARD_SIZE
-      const sy = y * SHARD_SIZE
-      const width = sx + SHARD_SIZE > img.clientWidth
+      const sx = x * SHARD_SIZE_PX
+      const sy = y * SHARD_SIZE_PX
+      const width = sx + SHARD_SIZE_PX > img.clientWidth
         ? clientWidth - sx
-        : SHARD_SIZE
-      const height = sy + SHARD_SIZE > img.clientHeight
+        : SHARD_SIZE_PX
+      const height = sy + SHARD_SIZE_PX > img.clientHeight
         ? clientHeight - sy
-        : SHARD_SIZE
+        : SHARD_SIZE_PX
       canvas.width = width
       canvas.height = height
       const context = canvas.getContext('2d')
