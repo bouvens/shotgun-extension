@@ -5,13 +5,13 @@ export let windowHeight
 
 export function updateViewport(onSizeUpdate) {
   function updateScroll() {
-    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft
-    scrollTop = window.pageYOffset || document.documentElement.scrollTop
+    scrollLeft = document.documentElement.scrollLeft
+    scrollTop = document.documentElement.scrollTop
   }
 
   function updateSize() {
-    windowWidth = window.innerWidth || document.documentElement.clientWidth
-    windowHeight = window.innerHeight || document.documentElement.clientHeight
+    windowWidth = document.documentElement.clientWidth
+    windowHeight = document.documentElement.clientHeight
 
     onSizeUpdate(scrollTop, scrollLeft)
   }
