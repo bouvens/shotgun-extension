@@ -5,8 +5,8 @@ export function handleClick(event) {
   event.stopImmediatePropagation()
   event.preventDefault()
 
-  const { pageX, pageY, shiftKey, ctrlKey, metaKey } = event
-  shoot(pageX, pageY, shiftKey, ctrlKey || metaKey, (target) => {
+  const { pageX, pageY, ctrlKey, metaKey } = event
+  shoot(pageX, pageY, ctrlKey || metaKey, (target) => {
     switch (target.type) {
       case ELEMENT_TYPES.LETTER:
         const flyingLetter = document.createElement('div')
