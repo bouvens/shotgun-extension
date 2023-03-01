@@ -1,4 +1,4 @@
-import { scrollLeft, scrollTop } from '../controller/viewport.js'
+import { scrollLeft, scrollTop } from './viewport.js'
 import { makeAddTarget } from '../model/targets.js'
 import { SHARD_SIZE_PX } from '../config.js'
 import * as ELEMENT_TYPES from '../element-types.js'
