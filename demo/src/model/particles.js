@@ -14,8 +14,8 @@ export function moveParticles() {
     const top = particle.initTop + y
     if (left >= windowWidth + scrollLeft
       || top >= windowHeight + scrollTop) {
-      particle.elem.style.display = 'none'
       allParticles.delete(particle)
+      particle.elem.remove()
       return
     }
     const rotation = particle.rotation + particle.rotationSpeed * slowMotionMultiplier
