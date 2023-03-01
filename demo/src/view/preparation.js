@@ -7,8 +7,8 @@ const ABSOLUTE_POSITIONS = ['absolute', 'fixed']
 const IMG_TAGS = ['IMG', 'CANVAS']
 
 export function addShield(clickHandler) {
-  const elem = document.createElement('div')
-  Object.assign(elem.style, {
+  const shieldElement = document.createElement('div')
+  Object.assign(shieldElement.style, {
     cursor: 'crosshair',
     'user-select': 'none',
     position: 'fixed',
@@ -16,19 +16,19 @@ export function addShield(clickHandler) {
     width: '100%',
     height: '100%',
   })
-  elem.addEventListener('click', clickHandler)
-  document.body.append(elem)
+  shieldElement.addEventListener('click', clickHandler)
+  document.body.append(shieldElement)
 }
 
 function divideImage(img) {
   const addTarget = makeAddTarget(scrollTop, scrollLeft, ELEMENT_TYPES.SHARD)
   const shards = []
   const { clientWidth, clientHeight } = img
-  const columns = Math.ceil(clientWidth / SHARD_SIZE_PX)
-  const rows = Math.ceil(clientHeight / SHARD_SIZE_PX)
+  const columnsCount = Math.ceil(clientWidth / SHARD_SIZE_PX)
+  const rowsCount = Math.ceil(clientHeight / SHARD_SIZE_PX)
 
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < columns; x++) {
+  for (let y = 0; y < rowsCount; y++) {
+    for (let x = 0; x < columnsCount; x++) {
       const canvas = document.createElement('canvas')
       const sx = x * SHARD_SIZE_PX
       const sy = y * SHARD_SIZE_PX
@@ -74,6 +74,7 @@ function divideText(text) {
     const addTarget = makeAddTarget(scrollTop, scrollLeft, ELEMENT_TYPES.LETTER)
     const str = child.nodeValue
     const letters = []
+    // Array.prototype.map doesn't work properly with emoji in strings
     for (const letter of str) {
       const letterElement = document.createElement('span')
       letterElement.textContent = letter
