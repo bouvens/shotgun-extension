@@ -2,7 +2,7 @@ import {
   BIG_SHOT_MULTIPLIER,
   FAST_ROTATION_PERIOD_S,
   FIRE_RADIUS_PX,
-  INITIAL_SPEED,
+  INITIAL_SPEED_MULTIPLIER,
   SLOW_ROTATION_PERIOD_S,
   SPEED_DISPERSION,
 } from '../config.js'
@@ -41,15 +41,15 @@ export function onViewportSizeUpdate(topOffset, leftOffset) {
   })
 }
 
-function distance(x1, y1, x2, y2) {
+function getDistance(x1, y1, x2, y2) {
   return ((x2 - x1) ** 2 + (y2 - y1) ** 2) ** 0.5
 }
 
-function getDispersion(c) {
+function getDispersedValue(c) {
   return (Math.random() * 2 - 1) * c
 }
 
-function getVectorCoordinate() {
+function getRandomVectorCoordinate() {
   return Math.random() * 2 - 1
 }
 
@@ -57,13 +57,13 @@ export function shoot(x, y, big, createFlyingElem) {
   const radius = FIRE_RADIUS_PX * (big ? BIG_SHOT_MULTIPLIER : 1)
 
   allTargets.forEach((target) => {
-    const curDistance = distance(x, y, target.x, target.y)
-    if (curDistance > radius) {
+    const distanceToTarget = getDistance(x, y, target.x, target.y)
+    if (distanceToTarget > radius) {
       return
     }
     allTargets.delete(target)
-    const time = curDistance / INITIAL_SPEED
-    const speedShift = getDispersion(SPEED_DISPERSION)
+    const time = distanceToTarget / INITIAL_SPEED_MULTIPLIER
+    const speedShift = getDispersedValue(SPEED_DISPERSION)
     const xVelocity = ((target.x - x) / time + speedShift)
     const yVelocity = ((target.y - y) / time + speedShift)
 
@@ -76,9 +76,9 @@ export function shoot(x, y, big, createFlyingElem) {
       xVelocity,
       yVelocity,
       rotation: 0,
-      rotationX: getVectorCoordinate(),
-      rotationY: getVectorCoordinate(),
-      rotationZ: getVectorCoordinate(),
+      rotationX: getRandomVectorCoordinate(),
+      rotationY: getRandomVectorCoordinate(),
+      rotationZ: getRandomVectorCoordinate(),
       rotationSpeed: (Math.random() * (SLOW_ROTATION_PERIOD_S - FAST_ROTATION_PERIOD_S) + FAST_ROTATION_PERIOD_S),
     })
   })
