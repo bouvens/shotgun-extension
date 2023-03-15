@@ -7,6 +7,8 @@ function repaintElement(particle, handleOut) {
   const left = particle.initLeft + x
   const top = particle.initTop + y
   if (left >= windowWidth + scrollLeft
+    || left < -particle.elem.width
+    || Number.isNaN(particle.elem.width)
     || top >= windowHeight + scrollTop) {
     handleOut()
     return
