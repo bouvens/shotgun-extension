@@ -87,8 +87,3 @@ article {
 .screen-shot img {
     vertical-align: middle;
 }
-
-/* new */
-* {
-    cursor: crosshair !important;
-}
