@@ -3,7 +3,7 @@ export let scrollTop
 export let windowWidth
 export let windowHeight
 
-export function updateViewport(onSizeUpdate) {
+export function watchViewport(onSizeUpdate) {
   function updateScroll() {
     scrollLeft = document.documentElement.scrollLeft
     scrollTop = document.documentElement.scrollTop
