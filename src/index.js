@@ -1,4 +1,5 @@
-import initialize from './initialize'
+// set the file extension to use the uncompressed script as a module
+import initialize from './initialize.js'
 
 const INITIALIZATION_TIMER_NAME = '🔫 Initialization'
 const NOT_LOADED_ERROR_MESSAGE = "Page isn't ready"
@@ -13,3 +14,5 @@ window.startShooting = () => {
   initialize()
   console.timeEnd(INITIALIZATION_TIMER_NAME)
 }
+
+// window.addEventListener('load', startShooting)
