@@ -87,12 +87,16 @@ function divideText(text) {
 }
 
 function prepareElement(elem) {
-  if (IMG_TAGS.includes(elem.tagName)) {
-    divideImage(elem)
-    return
-  }
+  try {
+    if (IMG_TAGS.includes(elem.tagName)) {
+      divideImage(elem)
+      return
+    }
 
-  divideText(elem)
+    divideText(elem)
+  } catch {
+    // oh no, element is not dividable, e.g. image is not loaded
+  }
 }
 
 function isVisible(elem) {
