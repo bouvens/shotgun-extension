@@ -1,8 +1,6 @@
 // set the file extension to use the uncompressed script as a module
 import initialize from './initialize.js'
-
-const INITIALIZATION_TIMER_NAME = '🔫 Initialization'
-const NOT_LOADED_ERROR_MESSAGE = "Page isn't ready"
+import { INITIALIZATION_TIMER_NAME, NOT_LOADED_ERROR_MESSAGE } from './config.js'
 
 window.startShooting = () => {
   if (window.document.readyState !== 'complete') {

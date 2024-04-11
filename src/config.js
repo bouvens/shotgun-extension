@@ -1,3 +1,5 @@
+export const INITIALIZATION_TIMER_NAME = '🔫 Initialization'
+export const NOT_LOADED_ERROR_MESSAGE = 'Page isn\'t ready'
 export const FIRE_RADIUS_PX = 100
 export const SLOW_MOTION_MULTIPLIER = 0.1
 export const BIG_SHOT_MULTIPLIER = 5
