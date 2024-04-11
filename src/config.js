@@ -1,3 +1,8 @@
+export const HELP = `Hold \`Shift\` for slow motion.
+
+Hold \`Cmd\` or \`Ctrl\` to increase damage.
+
+Reload a page to reset.`
 export const INITIALIZATION_TIMER_NAME = '🔫 Initialization'
 export const NOT_LOADED_ERROR_MESSAGE = 'Page isn\'t ready'
 export const FIRE_RADIUS_PX = 100
