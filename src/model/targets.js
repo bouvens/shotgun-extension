@@ -79,7 +79,8 @@ export function shoot(x, y, big, createFlyingElem) {
       rotationX: getRandomVectorCoordinate(),
       rotationY: getRandomVectorCoordinate(),
       rotationZ: getRandomVectorCoordinate(),
-      rotationSpeed: (Math.random() * (SLOW_ROTATION_PERIOD_S - FAST_ROTATION_PERIOD_S) + FAST_ROTATION_PERIOD_S),
+      rotationSpeed: (Math.random() * (SLOW_ROTATION_PERIOD_S - FAST_ROTATION_PERIOD_S)
+        + FAST_ROTATION_PERIOD_S),
     })
   })
 }

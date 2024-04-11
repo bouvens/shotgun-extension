@@ -15,6 +15,8 @@ function makeFlyingLetter(target) {
     'align-items': 'center',
   })
   target.elem.parentNode.prepend(flyingLetter)
+  // I want to update the target element
+  // eslint-disable-next-line no-param-reassign
   target.elem.style.visibility = 'hidden'
 
   return flyingLetter
@@ -35,6 +37,8 @@ function makeFlyingImageShard(target) {
     'box-shadow': '0 0 3px 0 rgba(0, 0, 0, 0.16), 0 0 3px 0 rgba(0, 0, 0, 0.23)',
   })
   target.elem.parentNode.prepend(flyingImage)
+  // I want to update the target element
+  // eslint-disable-next-line no-param-reassign
   target.elem.style.visibility = 'hidden'
 
   return flyingImage

@@ -14,8 +14,7 @@ function repaintElement(particle, handleOut) {
     return
   }
 
-  particle.elem.style.transform =
-    `translate(${x}px, ${y}px) rotate3d(${particle.rotationX}, ${particle.rotationY}, ${particle.rotationZ}, ${particle.rotation}deg)`
+  particle.elem.style.transform = `translate(${x}px, ${y}px) rotate3d(${particle.rotationX}, ${particle.rotationY}, ${particle.rotationZ}, ${particle.rotation}deg)`
 }
 
 export function animate() {
