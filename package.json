@@ -21,5 +21,6 @@
   },
   "author": "Alexander Demin <bouvens@gmail.com> (https://bouvens.github.io/)",
   "homepage": "https://bouvens.github.io/",
-  "repository": "github:bouvens/shotgun-extension"
+  "repository": "github:bouvens/shotgun-extension",
+  "license": "GPL-3.0-only"
 }
