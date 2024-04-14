@@ -47,7 +47,7 @@ function divideImage(img) {
   }
 
   const imgWrapper = document.createElement('div')
-  let absolute = ABSOLUTE_POSITIONS.includes(img.style.position)
+  const absolute = ABSOLUTE_POSITIONS.includes(img.style.position)
   Object.assign(imgWrapper.style, {
     ...absolute ? {
       position: 'absolute',
@@ -67,7 +67,7 @@ function divideImage(img) {
 }
 
 function divideText(text) {
-  text.childNodes.forEach(child => {
+  text.childNodes.forEach((child) => {
     if (!child.nodeValue) {
       return
     }
@@ -75,6 +75,7 @@ function divideText(text) {
     const str = child.nodeValue
     const letters = []
     // Array.prototype.map doesn't work properly with emoji in strings
+    // eslint-disable-next-line no-restricted-syntax
     for (const letter of str) {
       const letterElement = document.createElement('span')
       letterElement.textContent = letter
@@ -109,4 +110,3 @@ export function decomposePage() {
   const visibleElements = Array.prototype.filter.call(allElements, isVisible)
   visibleElements.forEach(prepareElement)
 }
-
