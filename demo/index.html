@@ -74,7 +74,23 @@
 
 <section class="list">
   <p>Here're my experiments with algorithms, colors, images, and computations. Everything is open-source.</p>
-  <button onclick="window.startShooting()">Start Shooting</button>
+
+  <p class="year">↓ 2023</p>
+
+  <article id="shotgun">
+    <h2>
+      Shotgun Extension Prototype
+      <small>Shoot This Page</small>
+    </h2>
+    <p>It's only <a href="js/lib/start.0.0.1.js" rel="nofollow">4.5 Kb minified</a> and 2.7 Kb compressed.</p>
+    <section class="links">
+      <a class="shooting" onclick="window.startShooting()">/start_shooting</a>
+      <a href="https://github.com/bouvens/shotgun-extension" rel="nofollow">/git</a>
+    </section>
+    <section class="screen-shot">
+      <img alt="A frame with flying letters after exposion" src="images/demo/shotgun-extension.png">
+    </section>
+  </article>
 
   <p class="year">↓ 2022</p>
 
@@ -86,7 +102,7 @@
     <p>This small joke works on Preact. It allows disabling “How To,” which makes it universal. Your personal
       search counter is for free!</p>
     <section class="links">
-      <a href="/howtoogle">/site</a>
+      <a href="/howtoogle">/demo</a>
       <a href="https://github.com/bouvens/howtoogle" rel="nofollow">/git</a>
     </section>
     <a class="screen-shot" href="/howtoogle" title="Get to know how to">
@@ -190,7 +206,8 @@
     </a>
   </article>
 
-  <p class="year">↓ 2016 <img class="dino" src="images/dino.svg" alt="pixel dino icon" title="the same old"></p>
+  <p class="year">↓ 2016 <img class="dino" src="images/dino.svg" alt="pixel dino icon" title="the same old">
+  </p>
 
   <article>
     <h2>
@@ -216,42 +233,6 @@
     <a href="https://github.com/bouvens">GitHub</a>
   </section>
 </footer>
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-J9FGNPT2LZ"></script>
-<script>
-  window.dataLayer = window.dataLayer || []
-
-  function gtag() {dataLayer.push(arguments)}
-
-  gtag('js', new Date())
-  gtag('config', 'G-J9FGNPT2LZ')
-</script>
-
-<!-- Yandex.Metrika counter -->
-<!--suppress CommaExpressionJS -->
-<script type="text/javascript">
-  (function (m, e, t, r, i, k, a) {
-    m[i] = m[i] || function () {(m[i].a = m[i].a || []).push(arguments)}
-    m[i].l = 1 * new Date()
-    k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src =
-      r, a.parentNode.insertBefore(k, a)
-  })
-  (window, document, 'script', 'https://cdn.jsdelivr.net/npm/yandex-metrica-watch/tag.js', 'ym')
-
-  ym(88924975, 'init', {
-    clickmap: true,
-    trackLinks: true,
-    accurateTrackBounce: true,
-    webvisor: true,
-    trackHash: true,
-  })
-</script>
-<noscript>
-  <div><img src="https://mc.yandex.ru/watch/88924975" style="position:absolute; left:-9999px;" alt="" />
-  </div>
-</noscript>
-<!-- /Yandex.Metrika counter -->
 
 </body>
 </html>
